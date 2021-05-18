@@ -20,7 +20,8 @@ public class game2p extends Canvas
     JLabel player1;
     JLabel player2;
     JLabel keyReader;
-
+    JLabel laser;
+    
     Action upAction;
     Action downAction;
     Action leftAction;
@@ -30,7 +31,7 @@ public class game2p extends Canvas
     Action downAction2;
     Action leftAction2;
     Action rightAction2;
-    int x;
+    
 
     game2p()
     {
@@ -62,6 +63,10 @@ public class game2p extends Canvas
         player2.setBackground(Color.blue);
         player2.setBounds(50,50,50,50);
         player2.setOpaque(true);
+        
+        
+        
+        
         ////////////Actions////////////////////////
         upAction = new UpAction();
         downAction = new DownAction();
@@ -76,6 +81,7 @@ public class game2p extends Canvas
         frame.setVisible(true);
         frame.add(keyReader);
         frame.add(player1);
+        player1.setLocation(player1.getX()+50,player1.getY());
         frame.add(player2);
 
         ////////////p1 keybinds///////////////////
@@ -107,22 +113,40 @@ public class game2p extends Canvas
 
     }
 
-    public boolean intersects(JLabel player1, JLabel player2){
+    public boolean intersects(JLabel player1, JLabel player2)
+    {
+        
+        
         Rectangle rectB = player2.getBounds();
-
+        
         Rectangle result = SwingUtilities.computeIntersection(player1.getX(), player1.getY(), player1.getWidth(), player1.getHeight(), rectB);
-
+        
         return (result.getWidth() > 0 && result.getHeight() > 0);
+        
+        
+        /**
+         * Rectangle rectB = player2.getBounds();
+           Rectangle result = SwingUtilities.computeIntersection(player1.getX(), player1.getY(), player1.getWidth(), player1.getHeight(), rectB);
+           return (result.getWidth() > 0 && result.getHeight() > 0);
+         */
+        
     }
 
     ////////////////p1 action set/////////////////
     public class UpAction extends AbstractAction
     {
+        //pass intersects two labels that are the future of the acction
+        //.
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            if((player1.getY()-10)>0 || intersects()= false ){
+            if((player1.getY()-10)>0 )
+            {
                 player1.setLocation(player1.getX(),player1.getY()-10);
+                if(intersects(player1,player2)== true )
+                {
+                    player1.setLocation(player1.getX(),player1.getY()+10);
+                }
             }
         }
     }
@@ -134,6 +158,10 @@ public class game2p extends Canvas
         {
             if((player1.getY()+10)<600 ){
                 player1.setLocation(player1.getX(),player1.getY()+10);
+                if(intersects(player1,player2)== true )
+                {
+                    player1.setLocation(player1.getX(),player1.getY()-10);
+                }
             }
         }
     }
@@ -145,6 +173,10 @@ public class game2p extends Canvas
         {
             if((player1.getX()-10)>0 ){
                 player1.setLocation(player1.getX()-10,player1.getY());
+                if(intersects(player1,player2)== true )
+                {
+                    player1.setLocation(player1.getX()+10,player1.getY());
+                }
             }
         }
     }
@@ -156,11 +188,43 @@ public class game2p extends Canvas
         {
             if((player1.getX()+10)<600 ){
                 player1.setLocation(player1.getX()+10,player1.getY());
+                if(intersects(player1,player2)== true )
+                {
+                    player1.setLocation(player1.getX()-10,player1.getY());
+                }
             }
         }
     }
+    
+    public class FireWeapon extends AbstractAction
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            
+            //
+            //draw a label relative to player one
+            //check after draw if that label intersects player2
+            
+            laser = new JLabel();
+            laser.setBackground(Color.green);
+            laser.setBounds(500,10,500,10);
+            laser.setOpaque(true);
+            laser.setLocation(player1.getX()+60,player1.getY()+20);
+            frame.add(laser);
+            if(intersects(laser,player2)==true)
+            {
+                //end game
+                //call runner and update 
+            }
+        }
+    }
+    
+    
     //////////////////p2 action set/////////////////////////////
-
+    ////////////////////////////////////////////////////////////
+    
+    
     public class UpAction2 extends AbstractAction
     {
         @Override
@@ -168,6 +232,10 @@ public class game2p extends Canvas
         {
             if((player2.getY()-10)>0 ){
                 player2.setLocation(player2.getX(),player2.getY()-10);
+                if(intersects(player1,player2)== true )
+                {
+                    player2.setLocation(player2.getX(),player2.getY()+10);
+                }
             }
         }
     }
@@ -179,6 +247,10 @@ public class game2p extends Canvas
         {
             if((player2.getY()+10)<600 ){
                 player2.setLocation(player2.getX(),player2.getY()+10);
+                if(intersects(player1,player2)== true )
+                {
+                    player2.setLocation(player2.getX(),player2.getY()-10);
+                }
             }
         }
     }
@@ -190,6 +262,10 @@ public class game2p extends Canvas
         {
             if((player2.getX()-10)>0 ){
                 player2.setLocation(player2.getX()-10,player2.getY());
+                if(intersects(player1,player2)== true )
+                {
+                    player2.setLocation(player2.getX()+10,player2.getY());
+                }
             }
         }
     }
@@ -201,6 +277,10 @@ public class game2p extends Canvas
         {
             if((player2.getX()+10)<600 ){
                 player2.setLocation(player2.getX()+10,player2.getY());
+                if(intersects(player1,player2)== true )
+                {
+                    player2.setLocation(player2.getX()-10,player2.getY());
+                }
             }
         }
     }
